@@ -1,5 +1,5 @@
 // const pg = require('pg');
-// const Pool = pg.Pool;
+// const Pool = pg.Pool;        same as below line
 const { Pool } = require('pg');
 
 const pool = new Pool({
