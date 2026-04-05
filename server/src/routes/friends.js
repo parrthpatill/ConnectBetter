@@ -1,9 +1,9 @@
-
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const auth = require("../middleware/auth"); 
+const auth = require("../middleware/authMiddleware"); 
 
+// Sending Request
 router.post("/request/:id", auth, async (req, res) => {
     const sender = req.user.id;
     const receiver = req.params.id;
@@ -11,6 +11,7 @@ router.post("/request/:id", auth, async (req, res) => {
     if (sender == receiver)
         return res.status(400).json({ msg: "Cannot send to yourself" });
 
+    // prevent duplicate & reverse duplicate
     const exist = await db.query(
         `SELECT * FROM friend_requests 
          WHERE (sender_id=$1 AND receiver_id=$2)
@@ -29,7 +30,7 @@ router.post("/request/:id", auth, async (req, res) => {
     res.json({ msg: "Friend request sent" });
 });
 
-
+// Accept Request
 router.post("/accept/:id", auth, async (req, res) => {
     const receiver = req.user.id;
     const sender = req.params.id;
@@ -47,7 +48,7 @@ router.post("/accept/:id", auth, async (req, res) => {
     res.json({ msg: "Friend request accepted" });
 });
 
-
+// Get Friends
 router.get("/", auth, async (req, res) => {
     const userId = req.user.id;
 
@@ -66,7 +67,7 @@ router.get("/", auth, async (req, res) => {
     res.json(result.rows);
 });
 
-
+// Get pending requests
 router.get("/pending", auth, async (req, res) => {
     const userId = req.user.id;
 

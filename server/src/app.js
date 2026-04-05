@@ -5,12 +5,15 @@ const express = require('express');
 const cors = require('cors');
 const authMiddleware = require("./middleware/authMiddleware");
 const authRoutes = require("./routes/authRoutes");
+const friendRoutes = require("./routes/friends");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+app.use("/api/friends", friendRoutes);
+
 app.get('/api/health', (req, res) => {
     res.status(200).json({
         status: "OK",
