@@ -15,6 +15,9 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/friends", friendRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/comments", require("./routes/commentRoutes"));
+app.use("/api/reactions", require("./routes/reactionRoutes"));
+app.use("/api/notifications", require("./routes/notificationRoutes"));
 
 app.get('/api/health', (req, res) => {
     res.status(200).json({
