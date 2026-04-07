@@ -14,6 +14,11 @@ exports.getNotifications = async (req, res) => {
 
         res.json(notifications.rows);
 
+        const io = req.app.get("io");
+        io.to(user_id).emit("receive_notification", {
+            message: "You got a notification"
+        });
+
     } catch (err) {
         res.status(500).json({ error: "Server error" });
     }
