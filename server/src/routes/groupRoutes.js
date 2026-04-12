@@ -5,5 +5,4 @@ const auth = require("../middleware/authMiddleware");
 
 router.post("/create", auth, createGroup);
 
-
 module.exports = router;

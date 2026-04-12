@@ -57,7 +57,26 @@ module.exports = (io) => {
         socket.on("joinGroup", (groupId) => {
             socket.join(`group_${groupId}`);
         });
-        
+
+        socket.on("sendGroupMessage", async ({ groupId, message }) => {
+            try {
+                // save in DB
+                const result = await db.query(
+                    `INSERT INTO messages (sender_id, group_id, content, is_group)
+                    VALUES ($1, $2, $3, true) RETURNING *`,
+                    [socket.userId, groupId, message]
+                );
+
+                const msg = result.rows[0];
+
+                // emit to all in group
+                io.to(`group_${groupId}`).emit("receiveGroupMessage", msg);
+
+            } catch (err) {
+                console.error(err);
+            }
+        });
+
     });
 };
 
