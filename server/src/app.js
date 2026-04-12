@@ -33,6 +33,7 @@ app.use("/api/comments", require("./routes/commentRoutes"));
 app.use("/api/reactions", require("./routes/reactionRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
 app.use("/api/messages", messageRoutes);
+app.use("/api/group", require("./routes/groupRoutes"));
 
 require("./services/socket")(io);
 

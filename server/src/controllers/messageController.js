@@ -61,3 +61,20 @@ exports.getMessages = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.getGroupMessages = async (req, res) => {
+    const { groupId } = req.params;
+
+    try {
+        const result = await db.query(
+            `SELECT * FROM messages
+             WHERE group_id = $1
+             ORDER BY created_at ASC`,
+            [groupId]
+        );
+
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

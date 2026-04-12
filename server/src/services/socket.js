@@ -52,6 +52,12 @@ module.exports = (io) => {
                 console.log(err);
             }
         });
+
+        // Join group room
+        socket.on("joinGroup", (groupId) => {
+            socket.join(`group_${groupId}`);
+        });
+        
     });
 };
 
