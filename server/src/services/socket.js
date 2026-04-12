@@ -1,3 +1,4 @@
+const db = require("../db");
 const users = {}; // userId -> socketId
 
 module.exports = (io) => {
@@ -32,5 +33,26 @@ module.exports = (io) => {
                 }
             }
         });
+
+        socket.on("sendMessage", async ({ sender, receiver, text }) => {
+            try {
+                // Save in DB
+                const result = await db.query(
+                    `INSERT INTO messages (sender_id, receiver_id, text)
+                    VALUES ($1, $2, $3)
+                    RETURNING *`,
+                    [sender, receiver, text]
+                );
+                const message = result.rows[0];
+                const room = [sender, receiver].sort().join("_");
+
+                io.to(room).emit("receiveMessage", message);
+
+            } catch (err) {
+                console.log(err);
+            }
+        });
     });
 };
+
+

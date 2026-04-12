@@ -8,6 +8,7 @@ const authMiddleware = require("./middleware/authMiddleware");
 const authRoutes = require("./routes/authRoutes");
 const friendRoutes = require("./routes/friends");
 const eventRoutes = require("./routes/eventRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 
 const http = require("http");
 const { Server } = require("socket.io");
@@ -31,6 +32,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/comments", require("./routes/commentRoutes"));
 app.use("/api/reactions", require("./routes/reactionRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
+app.use("/api/messages", messageRoutes);
 
 require("./services/socket")(io);
 
