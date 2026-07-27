@@ -10,6 +10,7 @@ const friendRoutes = require("./routes/friends");
 const eventRoutes = require("./routes/eventRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const aiRoutes = require("./routes/aiRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const http = require("http");
 const { Server } = require("socket.io");
@@ -36,6 +37,7 @@ app.use("/api/notifications", require("./routes/notificationRoutes"));
 app.use("/api/messages", messageRoutes);
 app.use("/api/group", require("./routes/groupRoutes"));
 app.use("/api/ai", aiRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 require("./services/socket")(io);
 
