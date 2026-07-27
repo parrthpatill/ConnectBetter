@@ -1,4 +1,9 @@
 const db = require("../db");
+const {
+    mapWeeklyData,
+    mapMonthlyData,
+    mapFriendGrowth
+} = require("../utils/analyticsHelpers");
 class AnalyticsService {
 
     async getDashboard(userId) {
@@ -151,10 +156,129 @@ class AnalyticsService {
     }
 
     async getProductivityScore(userId) {
+
+        const [
+            friends,
+            events,
+            messages,
+            groups,
+            comments,
+            reactions,
+            aiLogs,
+            notifications
+        ] = await Promise.all([
+
+            db.query(`
+                SELECT COUNT(*) AS total
+                FROM friend_requests
+                WHERE
+                (
+                    sender_id=$1
+                    OR receiver_id=$1
+                )
+                AND status='accepted'
+            `,[userId]),
+
+            db.query(`
+                SELECT COUNT(*) AS total
+                FROM events
+                WHERE user_id=$1
+            `,[userId]),
+
+            db.query(`
+                SELECT COUNT(*) AS total
+                FROM messages
+                WHERE sender_id=$1
+            `,[userId]),
+
+            db.query(`
+                SELECT COUNT(*) AS total
+                FROM groups
+                WHERE created_by=$1
+            `,[userId]),
+
+            db.query(`
+                SELECT COUNT(*) AS total
+                FROM comments
+                WHERE user_id=$1
+            `,[userId]),
+
+            db.query(`
+                SELECT COUNT(*) AS total
+                FROM reactions
+                WHERE user_id=$1
+            `,[userId]),
+
+            db.query(`
+                SELECT COUNT(*) AS total
+                FROM ai_logs
+                WHERE user_id=$1
+            `,[userId]),
+
+            db.query(`
+                SELECT COUNT(*) AS total
+                FROM notifications
+                WHERE
+                    user_id=$1
+                AND
+                    is_read=false
+            `,[userId])
+
+        ]);
+
+        const acceptedFriends = Number(friends.rows[0].total);
+
+        const totalEvents = Number(events.rows[0].total);
+
+        const totalMessages = Number(messages.rows[0].total);
+
+        const totalGroups = Number(groups.rows[0].total);
+
+        const totalComments = Number(comments.rows[0].total);
+
+        const totalReactions = Number(reactions.rows[0].total);
+
+        const totalAiLogs = Number(aiLogs.rows[0].total);
+
+        const unreadNotifications =
+            Number(notifications.rows[0].total);
+
+        const score =
+            acceptedFriends * 5 +
+            totalEvents * 10 +
+            totalMessages * 1 +
+            totalGroups * 8 +
+            totalComments * 3 +
+            totalReactions * 2 +
+            totalAiLogs * 4 -
+            unreadNotifications;
+
         return {
-            message: "Productivity Score service working",
-            userId
+
+            productivityScore: score,
+
+            breakdown: {
+
+                acceptedFriends,
+
+                totalEvents,
+
+                totalMessages,
+
+                totalGroups,
+
+                totalComments,
+
+                totalReactions,
+
+                totalAiLogs,
+
+                unreadNotifications
+
+            }
+
         };
+
     }
 
     async getEventFrequency(userId) {
@@ -227,24 +351,110 @@ class AnalyticsService {
     }
 
     async getWeeklyActivity(userId) {
-        return {
-            message: "Weekly Activity service working",
-            userId
-        };
+
+        const messageResult = await db.query(
+            `
+            SELECT
+                EXTRACT(DOW FROM created_at)::INT AS day,
+                COUNT(*)::INT AS total
+            FROM messages
+            WHERE sender_id = $1
+            GROUP BY day
+            `,
+            [userId]
+        );
+
+        const eventResult = await db.query(
+            `
+            SELECT
+                EXTRACT(DOW FROM event_date)::INT AS day,
+                COUNT(*)::INT AS total
+            FROM events
+            WHERE user_id = $1
+            GROUP BY day
+            `,
+            [userId]
+        );
+
+        return mapWeeklyData(
+            messageResult.rows,
+            eventResult.rows
+        );
+
     }
 
     async getMonthlyActivity(userId) {
-        return {
-            message: "Monthly Activity service working",
-            userId
-        };
+
+        const messageResult = await db.query(
+            `
+            SELECT
+                EXTRACT(MONTH FROM created_at)::INT AS month,
+                COUNT(*)::INT AS total
+            FROM messages
+            WHERE sender_id = $1
+            GROUP BY month
+            ORDER BY month
+            `,
+            [userId]
+        );
+
+        const eventResult = await db.query(
+            `
+            SELECT
+                EXTRACT(MONTH FROM event_date)::INT AS month,
+                COUNT(*)::INT AS total
+            FROM events
+            WHERE user_id = $1
+            GROUP BY month
+            ORDER BY month
+            `,
+            [userId]
+        );
+
+        return mapMonthlyData(
+            messageResult.rows,
+            eventResult.rows
+        );
+
     }
 
     async getFriendGrowth(userId) {
-        return {
-            message: "Friend Growth service working",
-            userId
-        };
+
+        const result = await db.query(
+            `
+            SELECT
+                EXTRACT(MONTH FROM created_at)::INT AS month,
+                COUNT(*)::INT AS total
+            FROM friend_requests
+            WHERE
+            (
+                sender_id = $1
+                OR receiver_id = $1
+            )
+            AND status = 'accepted'
+            GROUP BY month
+            ORDER BY month
+            `,
+            [userId]
+        );
+
+        const monthNames = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+
+        return mapFriendGrowth(result.rows);
+
     }
 
 }

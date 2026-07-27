@@ -60,14 +60,24 @@ exports.getProductivityScore = async (req, res) => {
         const score =
             await analyticsService.getProductivityScore(userId);
 
-        res.status(200).json(score);
+        res.status(200).json({
+
+            success: true,
+
+            data: score
+
+        });
 
     } catch (error) {
 
         console.error(error);
 
         res.status(500).json({
-            message: "Failed to fetch productivity score."
+
+            success: false,
+
+            message: "Failed to calculate productivity score."
+
         });
 
     }
@@ -107,17 +117,21 @@ exports.getWeeklyActivity = async (req, res) => {
 
         const userId = req.user.id;
 
-        const activity =
+        const weeklyData =
             await analyticsService.getWeeklyActivity(userId);
 
-        res.status(200).json(activity);
+        res.status(200).json({
+            success: true,
+            data: weeklyData
+        });
 
     } catch (error) {
 
         console.error(error);
 
         res.status(500).json({
-            message: "Failed to fetch weekly activity."
+            success: false,
+            message: "Failed to fetch weekly analytics."
         });
 
     }
@@ -130,17 +144,21 @@ exports.getMonthlyActivity = async (req, res) => {
 
         const userId = req.user.id;
 
-        const activity =
+        const monthlyData =
             await analyticsService.getMonthlyActivity(userId);
 
-        res.status(200).json(activity);
+        res.status(200).json({
+            success: true,
+            data: monthlyData
+        });
 
     } catch (error) {
 
         console.error(error);
 
         res.status(500).json({
-            message: "Failed to fetch monthly activity."
+            success: false,
+            message: "Failed to fetch monthly analytics."
         });
 
     }
@@ -156,14 +174,24 @@ exports.getFriendGrowth = async (req, res) => {
         const growth =
             await analyticsService.getFriendGrowth(userId);
 
-        res.status(200).json(growth);
+        res.status(200).json({
+
+            success: true,
+
+            data: growth
+
+        });
 
     } catch (error) {
 
         console.error(error);
 
         res.status(500).json({
+
+            success: false,
+
             message: "Failed to fetch friend growth."
+
         });
 
     }
