@@ -10,6 +10,8 @@ import { getEvents } from "../services/eventService";
 import { useAuth } from "../context/AuthContext";
 import { deleteEvent } from "../services/eventService";
 
+import AppLayout from "../layouts/AppLayout";
+
 function Feed() {
     const [events, setEvents] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -41,37 +43,24 @@ function Feed() {
         }
     };
     return (
-        <>
-            <Navbar />
+        <AppLayout>
 
-            <div
-                style={{
-                    maxWidth: "900px",
-                    margin: "30px auto",
-                }}
+            <button
+                onClick={() => setShowModal(true)}
             >
-                <button
-                    onClick={() => setShowModal(true)}
-                >
-                    Create Event
-                </button>
+                Create Event
+            </button>
 
-                <br />
-                <br />
+            <br /><br />
 
-                {events.length === 0 ? (
-                    <p>No events yet.</p>
-                ) : (
-                    events.map((event) => (
-                        <EventCard
-                            key={event.id}
-                            event={event}
-                            currentUser={user}
-                            onDelete={handleDelete}
-                        />
-                    ))
-                )}
-            </div>
+            {events.map(event => (
+                <EventCard
+                    key={event.id}
+                    event={event}
+                    currentUser={user}
+                    onDelete={handleDelete}
+                />
+            ))}
 
             {showModal && (
                 <Modal
@@ -86,7 +75,8 @@ function Feed() {
                     />
                 </Modal>
             )}
-        </>
+
+        </AppLayout>
     );
 }
 

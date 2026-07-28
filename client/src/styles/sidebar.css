@@ -1,0 +1,21 @@
+.sidebar{
+    width:230px;
+    background:white;
+    padding:25px;
+
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+
+    border-right:1px solid #eee;
+}
+
+.sidebar a{
+    text-decoration:none;
+    color:#444;
+    font-weight:500;
+}
+
+.sidebar a.active{
+    color:#2563eb;
+}
