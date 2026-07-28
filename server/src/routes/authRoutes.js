@@ -21,7 +21,11 @@ router.post("/register", async (req, res) => {
 
         res.json({
             message: "User registered successfully",
-            user: user.rows[0]
+            user: {
+                id: user.rows[0].id,
+                name: user.rows[0].name,
+                email: user.rows[0].email,
+            },
         });
 
     } catch (err) {
@@ -59,7 +63,14 @@ router.post("/login", async (req, res) => {
             { expiresIn: "1h" }
         );
 
-        res.json({ token });
+        res.json({
+            token,
+            user: {
+                id: user.rows[0].id,
+                name: user.rows[0].name,
+                email: user.rows[0].email,
+            },
+        });
 
     } catch (err) {
         console.error(err.message);
