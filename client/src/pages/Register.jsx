@@ -1,11 +1,20 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { registerUser } from "../services/authService";
-import { Link, useNavigate } from "react-router-dom";
+
+import {
+    FaComments,
+    FaCalendarAlt,
+    FaUsers,
+    FaChartLine,
+} from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import "../styles/auth.css";
 
 function Register() {
     const navigate = useNavigate();
-
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -14,6 +23,7 @@ function Register() {
 
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -27,6 +37,7 @@ function Register() {
 
         setMessage("");
         setError("");
+        setLoading(true);
 
         try {
             const data = await registerUser(formData);
@@ -39,73 +50,174 @@ function Register() {
 
         } catch (err) {
             setError(
-                err.response?.data?.message || "Registration failed"
+                err.response?.data?.message ||
+                "Registration failed"
             );
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div
-            style={{
-                maxWidth: "400px",
-                margin: "50px auto",
-            }}
-        >
-            <h1>Register</h1>
+        <div className="auth-page">
 
-            <form onSubmit={handleSubmit}>
+            <div className="auth-left">
 
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                />
+                <div className="auth-left-content">
 
-                <br /><br />
+                    <h1>Join ConnectBetter</h1>
 
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
+                    <p>
+                        Create your account and start chatting,
+                        organizing events, building communities,
+                        and collaborating with your friends.
+                    </p>
 
-                <br /><br />
+                    <div className="auth-features">
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                />
+                        <div className="auth-feature">
+                            <FaComments />
+                            <span>Real-time Messaging</span>
+                        </div>
 
-                <br /><br />
+                        <div className="auth-feature">
+                            <FaCalendarAlt />
+                            <span>Event Management</span>
+                        </div>
 
-                <button type="submit">
-                    Register
-                </button>
+                        <div className="auth-feature">
+                            <FaUsers />
+                            <span>Build Communities</span>
+                        </div>
 
-            </form>
+                        <div className="auth-feature">
+                            <FaChartLine />
+                            <span>Analytics Dashboard</span>
+                        </div>
 
-            {message && (
-                <p style={{ color: "green" }}>
-                    {message}
-                </p>
-            )}
+                    </div>
 
-            {error && (
-                <p style={{ color: "red" }}>
-                    {error}
-                </p>
-            )}
-            <p>
-                Already have an account?{" "}
-                <Link to="/login">Login</Link>
-            </p>
+                </div>
+
+            </div>
+
+            <div className="auth-right">
+
+                <div className="auth-card">
+
+                    <Link
+                        to="/"
+                        className="back-home"
+                    >
+                        ← Back to Home
+                    </Link>
+
+                    <div className="auth-logo">
+                        <Link to="/">
+                            ConnectBetter
+                        </Link>
+                    </div>
+
+                    <h2>Create Account</h2>
+
+                    <p className="auth-subtitle">
+                        Start your ConnectBetter journey.
+                    </p>
+
+                    <form
+                        className="auth-form"
+                        onSubmit={handleSubmit}
+                    >
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Full Name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Email Address"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <div className="password-field">
+
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() =>
+                                    setShowPassword(!showPassword)
+                                }
+                            >
+                                {showPassword ? (
+                                    <FaEyeSlash />
+                                ) : (
+                                    <FaEye />
+                                )}
+                            </button>
+
+                        </div>
+
+                        {message && (
+                            <p
+                                style={{
+                                    color: "#16a34a",
+                                    textAlign: "center",
+                                }}
+                            >
+                                {message}
+                            </p>
+                        )}
+
+                        {error && (
+                            <p className="auth-error">
+                                {error}
+                            </p>
+                        )}
+
+                        <button
+                            type="submit"
+                            className="auth-button"
+                            disabled={loading}
+                        >
+                            {loading
+                                ? "Creating Account..."
+                                : "Create Account"}
+                        </button>
+
+                    </form>
+
+                    <div className="auth-footer">
+
+                        <p>
+                            Already have an account?{" "}
+                            <Link to="/login">
+                                Login
+                            </Link>
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
     );
 }

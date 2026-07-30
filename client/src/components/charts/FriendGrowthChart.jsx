@@ -41,7 +41,10 @@ function FriendGrowthChart() {
 
                 <BarChart data={data}>
 
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid 
+                        strokeDasharray="3 3" 
+                        stroke="#e5e7eb"
+                    />
 
                     <XAxis
                         dataKey="month"
@@ -56,7 +59,11 @@ function FriendGrowthChart() {
 
                     <Legend />
 
-                    <Bar dataKey="friends" />
+                    <Bar 
+                        dataKey="friends" 
+                        fill="#2563eb"
+                        radius={[8, 8, 0, 0]}
+                    />
 
                 </BarChart>
 

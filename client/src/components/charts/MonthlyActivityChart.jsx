@@ -41,7 +41,10 @@ function MonthlyActivityChart() {
 
                 <LineChart data={data}>
 
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid 
+                        strokeDasharray="3 3"
+                        stroke="#e5e7eb"
+                    />
 
                     <XAxis
                         dataKey="month"
@@ -58,11 +61,19 @@ function MonthlyActivityChart() {
                     <Line
                         type="monotone"
                         dataKey="messages"
+                        stroke="#2563eb"
+                        strokeWidth={3}
+                        dot={{ r: 4 }}
+                        activeDot={{ r: 6 }}
                     />
 
                     <Line
                         type="monotone"
                         dataKey="events"
+                        stroke="#10b981"
+                        strokeWidth={3}
+                        dot={{ r: 4 }}
+                        activeDot={{ r: 6 }}
                     />
 
                 </LineChart>

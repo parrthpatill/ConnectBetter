@@ -1,60 +1,48 @@
 import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
-import api from "../api/axios";
 import "../styles/sidebar.css";
-import socket from "../services/socket";
+
+import {
+    FiHome,
+    FiUsers,
+    FiMessageCircle,
+    FiBell,
+    FiBarChart2,
+    FiUser,
+    FiGrid,
+} from "react-icons/fi";
+
 import { useNotifications } from "../context/NotificationContext";
 
 function Sidebar() {
-
     const { unreadCount } = useNotifications();
-    useEffect(() => {
-
-        const handleNotification = () => {
-
-            setUnreadCount(prev => prev + 1);
-
-        };
-
-        socket.on(
-            "newNotification",
-            handleNotification
-        );
-
-        return () => {
-
-            socket.off(
-                "newNotification",
-                handleNotification
-            );
-
-        };
-
-    }, []);
 
     return (
-
         <aside className="sidebar">
 
             <NavLink to="/">
-                Feed
+                <FiHome />
+                <span>Feed</span>
             </NavLink>
 
-            <NavLink to="/events">
-                Events
+            <NavLink to="/friends">
+                <FiUsers />
+                <span>Friends</span>
             </NavLink>
 
             <NavLink to="/messages">
-                Messages
+                <FiMessageCircle />
+                <span>Messages</span>
             </NavLink>
 
             <NavLink to="/groups">
-                Groups
+                <FiGrid />
+                <span>Groups</span>
             </NavLink>
 
             <NavLink to="/notifications">
-                Notifications
-                
+                <FiBell />
+                <span>Notifications</span>
+
                 {unreadCount > 0 && (
                     <span className="notification-badge">
                         {unreadCount}
@@ -63,21 +51,17 @@ function Sidebar() {
             </NavLink>
 
             <NavLink to="/analytics">
-                Analytics
+                <FiBarChart2 />
+                <span>Analytics</span>
             </NavLink>
 
             <NavLink to="/profile">
-                Profile
-            </NavLink>
-
-            <NavLink to="/friends">
-                Friends
+                <FiUser />
+                <span>Profile</span>
             </NavLink>
 
         </aside>
-
     );
-
 }
 
 export default Sidebar;

@@ -124,7 +124,7 @@ exports.sendGroupMessage = async (req, res) => {
             });
         }
 
-        const result = await db.query(
+        const inserted = await db.query(
             `INSERT INTO messages
             (
                 sender_id,
@@ -141,7 +141,7 @@ exports.sendGroupMessage = async (req, res) => {
                 $3,
                 TRUE
             )
-            RETURNING *`,
+            RETURNING id`,
             [
                 req.user.id,
                 text,
@@ -149,8 +149,18 @@ exports.sendGroupMessage = async (req, res) => {
             ]
         );
 
-        res.status(201).json(result.rows[0]);
+        const result = await db.query(
+            `SELECT
+                m.*,
+                u.name AS sender_name
+            FROM messages m
+            JOIN users u
+            ON u.id = m.sender_id
+            WHERE m.id = $1`,
+            [inserted.rows[0].id]
+        );
 
+        res.status(201).json(result.rows[0]);
     } catch (err) {
 
         res.status(500).json({

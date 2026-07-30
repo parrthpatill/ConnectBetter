@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Landing from "../pages/Landing";
 import Feed from "../pages/Feed";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
+
 import ProtectedRoute from "../components/ProtectedRoute";
-import Analytics from "../pages/Analytics";
 import AppLayout from "../layouts/AppLayout";
+
+import Analytics from "../pages/Analytics";
 import Messages from "../pages/Messages";
 import Notifications from "../pages/Notifications";
 import Profile from "../pages/Profile";
@@ -18,50 +21,12 @@ function AppRoutes() {
         <BrowserRouter>
             <Routes>
 
+                {/* Public Routes */}
+
                 <Route
-                    element={
-                        <ProtectedRoute>
-                            <AppLayout />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route
-                        index
-                        element={<Feed />}
-                    />
-
-                    <Route
-                        path="friends"
-                        element={<Friends />}
-                    />
-
-                    <Route
-                        path="analytics"
-                        element={<Analytics />}
-                    />
-
-                    <Route
-                        path="messages"
-                        element={<Messages />}
-                    />
-
-                    <Route
-                        path="notifications"
-                        element={<Notifications />}
-                    />
-
-                    <Route
-                        path="profile"
-                        element={<Profile />}
-                    />
-
-                    <Route
-                        path="groups"
-                        element={<Groups />}
-                    />
-
-                    {/* Add Events here too if you have an Events page */}
-                </Route>
+                    path="/"
+                    element={<Landing />}
+                />
 
                 <Route
                     path="/login"
@@ -71,6 +36,56 @@ function AppRoutes() {
                 <Route
                     path="/register"
                     element={<Register />}
+                />
+
+                {/* Protected Routes */}
+
+                <Route
+                    element={
+                        <ProtectedRoute>
+                            <AppLayout />
+                        </ProtectedRoute>
+                    }
+                >
+                    <Route
+                        path="/feed"
+                        element={<Feed />}
+                    />
+
+                    <Route
+                        path="/friends"
+                        element={<Friends />}
+                    />
+
+                    <Route
+                        path="/analytics"
+                        element={<Analytics />}
+                    />
+
+                    <Route
+                        path="/messages"
+                        element={<Messages />}
+                    />
+
+                    <Route
+                        path="/notifications"
+                        element={<Notifications />}
+                    />
+
+                    <Route
+                        path="/profile"
+                        element={<Profile />}
+                    />
+
+                    <Route
+                        path="/groups"
+                        element={<Groups />}
+                    />
+                </Route>
+
+                <Route
+                    path="*"
+                    element={<NotFound />}
                 />
 
             </Routes>

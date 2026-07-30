@@ -25,35 +25,50 @@ function EventCard({
 
             <div className="event-footer">
 
-                <div>
+                <div className="event-author">
 
-                    <strong>{event.name}</strong>
+                    <div className="event-author-avatar">
+                        {event.name.charAt(0).toUpperCase()}
+                    </div>
 
-                    <br />
+                    <div>
 
-                    <span>created an event</span>
+                        <strong>{event.name}</strong>
 
-                    <br />
+                        <small>
+                            {new Date(
+                                event.event_date
+                            ).toLocaleString()}
+                        </small>
 
-                    <small>
-                        {new Date(event.event_date).toLocaleString()}
-                    </small>
+                    </div>
 
                 </div>
 
                 {isOwner && (
+
                     <button
                         className="delete-btn"
-                        onClick={() => onDelete(event.id)}
+                        onClick={() => {
+                            const confirmed = window.confirm(
+                                "Are you sure you want to delete this event?"
+                            );
+
+                            if (confirmed) {
+                                onDelete(event.id);
+                            }
+                        }}
                     >
                         Delete
                     </button>
+
                 )}
 
             </div>
 
         </div>
     );
+
 }
 
 export default EventCard;

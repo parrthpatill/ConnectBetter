@@ -6,12 +6,16 @@ import ConversationList from "../components/ConversationList";
 import ChatWindow from "../components/ChatWindow";
 import socket from "../services/socket";
 
+import "../styles/messages.css";
+
 function Messages() {
 
     const [friends, setFriends] = useState([]);
     const [selectedFriend, setSelectedFriend] = useState(null);
     const [messages, setMessages] = useState([]);
+
     const location = useLocation();
+
     useEffect(() => {
 
         const fetchFriends = async () => {
@@ -44,13 +48,16 @@ function Messages() {
 
         fetchFriends();
 
-    }, []);
+    }, [location.state]);
 
     useEffect(() => {
 
         if (!selectedFriend) {
+
             setMessages([]);
+
             return;
+
         }
 
         const fetchMessages = async () => {
@@ -81,7 +88,8 @@ function Messages() {
             return;
         }
 
-        const currentUser = JSON.parse(localStorage.getItem("user"));
+        const currentUser =
+            JSON.parse(localStorage.getItem("user"));
 
         socket.emit("joinPrivateRoom", {
             sender: currentUser.id,
@@ -96,8 +104,9 @@ function Messages() {
 
             setMessages((prev) => {
 
-                // Prevent duplicate messages
-                const exists = prev.some((msg) => msg.id === message.id);
+                const exists = prev.some(
+                    (msg) => msg.id === message.id
+                );
 
                 if (exists) {
                     return prev;
@@ -113,7 +122,10 @@ function Messages() {
 
         return () => {
 
-            socket.off("receiveMessage", handleReceiveMessage);
+            socket.off(
+                "receiveMessage",
+                handleReceiveMessage
+            );
 
         };
 
@@ -143,7 +155,8 @@ function Messages() {
     };
 
     return (
-        <div className="flex h-[calc(100vh-80px)] bg-gray-100 rounded-lg overflow-hidden">
+
+        <div className="messages-page">
 
             <ConversationList
                 friends={friends}
@@ -158,7 +171,9 @@ function Messages() {
             />
 
         </div>
+
     );
+
 }
 
 export default Messages;

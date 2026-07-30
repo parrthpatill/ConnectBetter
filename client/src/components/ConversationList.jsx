@@ -3,51 +3,46 @@ function ConversationList({
     selectedFriend,
     onSelectFriend,
 }) {
-
     return (
-        <div className="w-80 border-r bg-white">
+        <div className="conversation-list">
 
-            <div className="p-4 border-b">
-                <h2 className="text-xl font-semibold">
-                    Conversations
-                </h2>
+            <div className="conversation-header">
+                <h2>Conversations</h2>
             </div>
 
-            {
-                friends.length === 0 ? (
+            {friends.length === 0 ? (
 
-                    <div className="p-4 text-gray-500">
-                        No friends found.
-                    </div>
+                <div className="conversation-empty">
+                    No friends found.
+                </div>
 
-                ) : (
+            ) : (
 
-                    friends.map((friend) => (
+                friends.map((friend) => (
 
-                        <button
-                            key={friend.id}
-                            onClick={() => onSelectFriend(friend)}
-                            className={`w-full text-left p-4 border-b hover:bg-gray-100 transition ${
-                                selectedFriend?.id === friend.id
-                                    ? "bg-gray-200"
-                                    : ""
-                            }`}
-                        >
+                    <button
+                        key={friend.id}
+                        onClick={() => onSelectFriend(friend)}
+                        className={`conversation-item ${
+                            selectedFriend?.id === friend.id
+                                ? "active"
+                                : ""
+                        }`}
+                    >
 
-                            <div className="font-medium">
-                                {friend.name}
-                            </div>
+                        <div className="conversation-name">
+                            {friend.name}
+                        </div>
 
-                            <div className="text-sm text-gray-500">
-                                {friend.email}
-                            </div>
+                        <div className="conversation-email">
+                            {friend.email}
+                        </div>
 
-                        </button>
+                    </button>
 
-                    ))
+                ))
 
-                )
-            }
+            )}
 
         </div>
     );

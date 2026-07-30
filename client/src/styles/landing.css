@@ -1,0 +1,495 @@
+/* ---------- Global ---------- */
+
+.landing {
+    min-height: 100vh;
+    background: #f8fafc;
+    color: #111827;
+    font-family: inherit;
+}
+
+/* ---------- Navbar ---------- */
+
+.landing-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 8%;
+
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.landing-logo {
+    text-decoration: none;
+}
+
+.landing-logo h2 {
+    margin: 0;
+
+    font-size: 30px;
+    font-weight: 700;
+
+    color: #2563eb;
+
+    transition: 0.25s;
+}
+
+.landing-logo:hover h2 {
+    color: #1d4ed8;
+}
+
+.landing-links {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.landing-links a {
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+}
+
+.landing-links a:hover {
+    color: #2563eb;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 12px 26px;
+    gap: 10px;
+    border-radius: 10px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.25s;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    background: white;
+}
+
+.btn-outline:hover {
+    background: #2563eb;
+    color: white;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 60px;
+
+    padding: 90px 8%;
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.hero-content h1 {
+    margin-bottom: 24px;
+
+    font-size: 60px;
+    line-height: 1.15;
+
+    color: #111827;
+}
+
+.hero-content p {
+    max-width: 600px;
+
+    margin-bottom: 36px;
+
+    font-size: 18px;
+    line-height: 1.8;
+
+    color: #4b5563;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.hero-image {
+    flex: 1;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 24px;
+}
+
+.hero-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 160px;
+
+    border-radius: 20px;
+
+    background: white;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+
+    transition: 0.3s;
+}
+
+.hero-card:hover {
+    transform: translateY(-8px);
+}
+
+/* ---------- Features ---------- */
+
+.features {
+    padding: 90px 8%;
+
+    text-align: center;
+}
+
+.features h2 {
+    margin-bottom: 50px;
+
+    font-size: 42px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+    gap: 30px;
+}
+
+.feature-card {
+    padding: 35px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+}
+
+.feature-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 18px;
+
+    color: #2563eb;
+}
+
+.feature-card p {
+    color: #4b5563;
+    line-height: 1.7;
+}
+
+.feature-card svg {
+    font-size: 20px;
+}
+
+/* ---------- CTA ---------- */
+
+.cta {
+    margin: 90px 8%;
+
+    padding: 70px 40px;
+
+    text-align: center;
+
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+
+    border-radius: 24px;
+
+    color: white;
+}
+
+.cta h2 {
+    margin-bottom: 20px;
+
+    font-size: 42px;
+}
+
+.cta p {
+    margin-bottom: 35px;
+
+    font-size: 18px;
+}
+
+.cta .btn-primary {
+    background: white;
+    color: #2563eb;
+}
+
+.cta .btn-primary:hover {
+    background: #f3f4f6;
+}
+
+/* ---------- Footer ---------- */
+
+.landing-footer {
+    padding: 35px;
+
+    text-align: center;
+
+    color: #6b7280;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 992px) {
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-content p {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-content h1 {
+        font-size: 48px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .landing-navbar {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .landing-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero {
+        padding: 60px 6%;
+    }
+
+    .hero-content h1 {
+        font-size: 38px;
+    }
+
+    .features h2,
+    .cta h2 {
+        font-size: 34px;
+    }
+
+    .hero-image {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* Dashboard Preview */
+
+.hero-preview {
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+}
+
+.preview-window {
+
+    width: 100%;
+    max-width: 520px;
+
+    background: white;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 30px 60px rgba(0,0,0,.12);
+
+    transition: .3s;
+}
+
+.preview-window:hover {
+
+    transform: translateY(-8px);
+
+}
+
+.preview-header {
+
+    height: 64px;
+
+    background: #2563eb;
+
+    color: white;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 0 22px;
+
+}
+
+.preview-logo {
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+.preview-avatar {
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    color: #2563eb;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-weight: 700;
+
+}
+
+.preview-body {
+
+    display: flex;
+
+    min-height: 360px;
+
+}
+
+.preview-sidebar {
+
+    width: 150px;
+
+    background: #f8fafc;
+
+    border-right: 1px solid #e5e7eb;
+
+    padding: 18px;
+
+}
+
+.sidebar-item {
+
+    padding: 12px 16px;
+
+    border-radius: 10px;
+
+    margin-bottom: 12px;
+
+    font-weight: 600;
+
+    color: #374151;
+
+}
+
+.sidebar-item.active {
+
+    background: #2563eb;
+
+    color: white;
+
+}
+
+.preview-feed {
+
+    flex: 1;
+
+    padding: 18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+.feed-card {
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+}
+
+.feed-card h4 {
+
+    margin-bottom: 8px;
+
+    color: #111827;
+
+}
+
+.feed-card p {
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+}

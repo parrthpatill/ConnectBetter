@@ -1,47 +1,100 @@
-.feed-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    margin-bottom:30px;
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding: 28px 32px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-.feed-header h1{
-    margin:0;
-    font-size:30px;
+.feed-header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
 }
 
-.feed-header p{
-    margin-top:6px;
-    color:#6b7280;
+.feed-header p {
+    margin: 8px 0 0;
+    color: #6b7280;
+    font-size: 15px;
+    line-height: 1.6;
 }
 
-.create-event-btn{
-    background:#2563eb;
-    color:white;
-
-    border:none;
-    padding:12px 22px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    font-size:15px;
-    font-weight:600;
+.create-event-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 24px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-.create-event-btn:hover{
-    background:#1d4ed8;
+.create-event-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.28);
 }
 
-.empty-feed{
-    background:white;
-    padding:50px;
+.create-event-btn:active {
+    transform: translateY(0);
+}
 
-    border-radius:12px;
+.empty-feed {
+    background: #ffffff;
+    border: 1px dashed #d1d5db;
+    border-radius: 16px;
+    padding: 70px 30px;
+    text-align: center;
+    color: #6b7280;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
 
-    text-align:center;
+.empty-feed h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #111827;
+}
 
-    color:#6b7280;
+.empty-feed p {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.feed-divider {
+    margin: 28px 0;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+}
+
+@media (max-width: 768px) {
+
+    .feed-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+    }
+
+    .feed-header h1 {
+        font-size: 28px;
+    }
+
+    .create-event-btn {
+        width: 100%;
+    }
+
+    .empty-feed {
+        padding: 50px 24px;
+    }
+
 }

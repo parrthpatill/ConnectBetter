@@ -1,42 +1,40 @@
 import { useEffect, useState } from "react";
+import {
+    FiCalendar,
+    FiUsers,
+    FiBell,
+    FiTrendingUp,
+} from "react-icons/fi";
 import { getDashboard } from "../services/analyticsService";
 import "../styles/rightPanel.css";
 
 function RightPanel() {
-
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
         const fetchDashboard = async () => {
-
             try {
-
                 const data = await getDashboard();
                 setStats(data);
-
             } catch (error) {
-
-                console.error("Failed to load dashboard stats:", error);
-
+                console.error(error);
             } finally {
-
                 setLoading(false);
-
             }
-
         };
 
         fetchDashboard();
-
     }, []);
 
     if (loading) {
         return (
             <aside className="right-panel">
                 <h3>Quick Stats</h3>
-                <p>Loading...</p>
+
+                <div className="loading-state">
+                    Loading dashboard...
+                </div>
             </aside>
         );
     }
@@ -46,13 +44,61 @@ function RightPanel() {
 
             <h3>Quick Stats</h3>
 
-            <p>Events Created: {stats.events}</p>
+            <div className="stats-list">
 
-            <p>Friends: {stats.friends}</p>
+                <div className="stat-row">
 
-            <p>Unread Notifications: {stats.notifications}</p>
+                    <div className="stat-left">
+                        <FiCalendar />
+                        <span>Events</span>
+                    </div>
 
-            <p>Productivity Score: {stats.productivityScore}</p>
+                    <span className="stat-value">
+                        {stats.events}
+                    </span>
+
+                </div>
+
+                <div className="stat-row">
+
+                    <div className="stat-left">
+                        <FiUsers />
+                        <span>Friends</span>
+                    </div>
+
+                    <span className="stat-value">
+                        {stats.friends}
+                    </span>
+
+                </div>
+
+                <div className="stat-row">
+
+                    <div className="stat-left">
+                        <FiBell />
+                        <span>Notifications</span>
+                    </div>
+
+                    <span className="stat-value">
+                        {stats.notifications}
+                    </span>
+
+                </div>
+
+                <div className="stat-row">
+
+                    <div className="stat-left">
+                        <FiTrendingUp />
+                        <span>Productivity</span>
+                    </div>
+
+                    <span className="stat-value">
+                        {stats.productivityScore}
+                    </span>
+
+                </div>
+
+            </div>
 
         </aside>
     );

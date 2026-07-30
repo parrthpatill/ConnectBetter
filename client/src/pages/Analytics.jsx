@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { getDashboard } from "../services/analyticsService";
+
 import StatCard from "../components/StatCard";
 import WeeklyActivityChart from "../components/charts/WeeklyActivityChart";
 import MonthlyActivityChart from "../components/charts/MonthlyActivityChart";
 import FriendGrowthChart from "../components/charts/FriendGrowthChart";
 import EventSummary from "../components/charts/EventSummary";
+
+import "../styles/analytics.css";
 
 function Analytics() {
 
@@ -37,61 +40,82 @@ function Analytics() {
     }, []);
 
     if (loading) {
-        return <h2>Loading Analytics...</h2>;
+
+        return (
+            <div className="analytics-loading">
+                Loading Analytics...
+            </div>
+        );
+
     }
 
     return (
 
-        <div>
+        <div className="analytics-page">
 
-            <h1>Analytics Dashboard</h1>
+            <div className="analytics-header">
 
-            <div className="analytics-page">
+                <div>
 
-                <div className="stats-grid">
+                    <h1>Analytics Dashboard</h1>
 
-                    <StatCard
-                        title="Friends"
-                        value={stats.friends}
-                    />
-
-                    <StatCard
-                        title="Events"
-                        value={stats.events}
-                    />
-
-                    <StatCard
-                        title="Messages"
-                        value={stats.messages}
-                    />
-
-                    <StatCard
-                        title="Groups"
-                        value={stats.groups}
-                    />
-
-                    <StatCard
-                        title="Notifications"
-                        value={stats.notifications}
-                    />
-
-                    <StatCard
-                        title="Productivity Score"
-                        value={stats.productivityScore}
-                    />
+                    <p>
+                        Track your activity, engagement and overall growth.
+                    </p>
 
                 </div>
-                <div className="charts-grid">
 
-                    <div className="full-width">
-                        <WeeklyActivityChart />
-                    </div>
+            </div>
 
-                    <div className="full-width">
-                        <MonthlyActivityChart />
-                    </div>
+            <div className="stats-grid">
 
+                <StatCard
+                    title="Friends"
+                    value={stats.friends}
+                />
+
+                <StatCard
+                    title="Events"
+                    value={stats.events}
+                />
+
+                <StatCard
+                    title="Messages"
+                    value={stats.messages}
+                />
+
+                <StatCard
+                    title="Groups"
+                    value={stats.groups}
+                />
+
+                <StatCard
+                    title="Notifications"
+                    value={stats.notifications}
+                />
+
+                <StatCard
+                    title="Productivity Score"
+                    value={stats.productivityScore}
+                />
+
+            </div>
+
+            <div className="charts-grid">
+
+                <div className="chart-card full-width">
+                    <WeeklyActivityChart />
+                </div>
+
+                <div className="chart-card full-width">
+                    <MonthlyActivityChart />
+                </div>
+
+                <div className="chart-card">
                     <FriendGrowthChart />
+                </div>
+
+                <div className="chart-card">
                     <EventSummary />
                 </div>
 

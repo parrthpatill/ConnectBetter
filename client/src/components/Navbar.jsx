@@ -6,18 +6,23 @@ function Navbar() {
 
     return (
         <nav className="navbar">
-            <h2>ConnectBetter</h2>
 
-            <div className="nav-links">
-                <span>Feed</span>
-                <span>Events</span>
-                <span>Groups</span>
-                <span>Profile</span>
+            <div className="navbar-logo">
+                <h2>ConnectBetter</h2>
             </div>
 
-            <div>
-                {user && <strong>{user.name}</strong>}
+            <div className="navbar-user">
+
+                <div className="user-avatar">
+                    {user?.name?.charAt(0).toUpperCase()}
+                </div>
+
+                <span className="user-name">
+                    {user?.name}
+                </span>
+
             </div>
+
         </nav>
     );
 }

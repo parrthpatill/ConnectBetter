@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import { useNotifications } from "../context/NotificationContext";
+import "../styles/notifications.css";
 
 function Notifications() {
     const { setUnreadCount } = useNotifications();
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
-
         const fetchNotifications = async () => {
-
             try {
-
                 const response = await api.get("/notifications");
 
                 setNotifications(response.data);
@@ -20,78 +18,80 @@ function Notifications() {
 
                 setUnreadCount(0);
             } catch (err) {
-
                 console.error("Failed to load notifications:", err);
-
             }
-
         };
 
         fetchNotifications();
-
     }, []);
 
     return (
+        <div className="notifications-page">
 
-        <div className="max-w-3xl mx-auto p-6">
+            <div className="notifications-header">
+                <h1>Notifications</h1>
+                <p>Stay updated with everything happening in your network.</p>
+            </div>
 
-            <h1 className="text-3xl font-bold mb-6">
-                Notifications
-            </h1>
+            {notifications.length === 0 ? (
 
-            {
-                notifications.length === 0 ? (
+                <div className="empty-notifications">
 
-                    <p className="text-gray-500">
-                        No notifications yet.
-                    </p>
+                    <h3>No notifications yet</h3>
 
-                ) : (
+                    <p>Friend requests and activity updates will appear here.</p>
 
-                    <div className="space-y-4">
+                </div>
 
-                        {
-                            notifications.map((notification) => (
+            ) : (
 
-                                <div
-                                    key={notification.id}
-                                    className={`rounded-lg shadow p-4 border-l-4 ${
-                                        notification.is_read
-                                            ? "bg-white border-gray-300"
-                                            : "bg-blue-50 border-blue-500"
-                                    }`}
-                                >
+                <div className="notifications-list">
 
-                                    <p className="font-medium text-gray-800">
-                                        {notification.message}
-                                    </p>
+                    {notifications.map((notification) => (
 
-                                    <div className="mt-2 flex justify-between items-center text-sm text-gray-500">
+                        <div
+                            key={notification.id}
+                            className={`notification-card ${
+                                !notification.is_read ? "unread" : ""
+                            }`}
+                        >
 
-                                        <span>
-                                            {notification.type || "Notification"}
-                                        </span>
+                            <div className="notification-content">
 
-                                        <span>
-                                            {new Date(notification.created_at).toLocaleString()}
-                                        </span>
+                                <p className="notification-message">
+                                    {notification.message}
+                                </p>
 
-                                    </div>
+                                <div className="notification-meta">
+
+                                    <span>
+                                        {notification.type || "Notification"}
+                                    </span>
+
+                                    <span>
+                                        {new Date(
+                                            notification.created_at
+                                        ).toLocaleString()}
+                                    </span>
 
                                 </div>
 
-                            ))
-                        }
+                            </div>
 
-                    </div>
+                            {!notification.is_read && (
+                                <div className="notification-badge" />
+                            )}
 
-                )
-            }
+                        </div>
+
+                    ))}
+
+                </div>
+
+            )}
 
         </div>
-
     );
-
 }
 
 export default Notifications;

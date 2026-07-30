@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import "../styles/friends.css";
 import { useNavigate } from "react-router-dom";
