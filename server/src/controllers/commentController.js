@@ -25,6 +25,11 @@ exports.addComment = async (req, res) => {
                 "INSERT INTO notifications (user_id, sender_id, type, event_id) VALUES ($1,$2,$3,$4)",
                 [event.rows[0].user_id, userId, "comment", eventId]
             );
+            const io = req.app.get("io");
+
+            io.to(event.rows[0].user_id.toString()).emit(
+                "newNotification"
+            );
         }
 
         res.json(comment.rows[0]);

@@ -11,6 +11,7 @@ import Messages from "../pages/Messages";
 import Notifications from "../pages/Notifications";
 import Profile from "../pages/Profile";
 import Groups from "../pages/Groups";
+import Friends from "../pages/Friends";
 
 function AppRoutes() {
     return (
@@ -24,10 +25,14 @@ function AppRoutes() {
                         </ProtectedRoute>
                     }
                 >
-
                     <Route
                         index
                         element={<Feed />}
+                    />
+
+                    <Route
+                        path="friends"
+                        element={<Friends />}
                     />
 
                     <Route
@@ -35,6 +40,27 @@ function AppRoutes() {
                         element={<Analytics />}
                     />
 
+                    <Route
+                        path="messages"
+                        element={<Messages />}
+                    />
+
+                    <Route
+                        path="notifications"
+                        element={<Notifications />}
+                    />
+
+                    <Route
+                        path="profile"
+                        element={<Profile />}
+                    />
+
+                    <Route
+                        path="groups"
+                        element={<Groups />}
+                    />
+
+                    {/* Add Events here too if you have an Events page */}
                 </Route>
 
                 <Route
@@ -45,31 +71,6 @@ function AppRoutes() {
                 <Route
                     path="/register"
                     element={<Register />}
-                />
-
-                <Route
-                    path="messages"
-                    element={<Messages />}
-                />
-
-                <Route 
-                    path="/notifications" 
-                    element={<Notifications />} 
-                />
-
-                <Route
-                    path="/profile"
-                    element={<Profile />}
-                />
-
-                <Route
-                    path="/groups"
-                    element={<Groups />}
-                />
-
-                <Route
-                    path="*"
-                    element={<NotFound />}
                 />
 
             </Routes>

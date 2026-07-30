@@ -20,7 +20,7 @@ exports.createGroup = async (req, res) => {
         );
 
         // add members
-        const uniqueMembers = [...new Set(members)];
+        const uniqueMembers = [...new Set(members || [])];
 
         for (const memberId of uniqueMembers) {
 
@@ -50,16 +50,25 @@ exports.getMyGroups = async (req, res) => {
             `SELECT
                 g.id,
                 g.name,
-                g.created_at
-             FROM groups g
-             JOIN group_members gm
-               ON gm.group_id = g.id
-             WHERE gm.user_id = $1
-             ORDER BY g.created_at DESC`,
+                g.created_at,
+                COUNT(gm2.user_id) AS member_count
+            FROM groups g
+            JOIN group_members gm
+                ON gm.group_id = g.id
+            LEFT JOIN group_members gm2
+                ON gm2.group_id = g.id
+            WHERE gm.user_id = $1
+            GROUP BY g.id
+            ORDER BY g.created_at DESC;`,
             [req.user.id]
         );
 
-        res.json(result.rows);
+        res.json(
+             result.rows.map(group => ({
+                ...group,
+                member_count: Number(group.member_count),
+            }))
+        );
 
     } catch (err) {
 

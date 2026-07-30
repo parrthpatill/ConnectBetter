@@ -3,12 +3,16 @@ import api from "../api/axios";
 import ChatWindow from "../components/ChatWindow";
 import "../styles/groups.css";
 import socket from "../services/socket";
+import Modal from "../components/Modal";
+import CreateGroupModal from "../components/CreateGroupModal";
 
 function Groups() {
 
     const [groups, setGroups] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [messages, setMessages] = useState([]);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+
 
     useEffect(() => {
 
@@ -18,7 +22,12 @@ function Groups() {
 
     useEffect(() => {
         if (!selectedGroup) return;
+
         socket.emit("joinGroup", selectedGroup.id);
+
+        return () => {
+            socket.emit("leaveGroup", selectedGroup.id);
+        };
     }, [selectedGroup]);
 
     useEffect(() => {
@@ -126,7 +135,18 @@ function Groups() {
 
             <div className="groups-sidebar">
 
-                <h2>Groups</h2>
+                <div className="groups-header">
+
+                    <h2>Groups</h2>
+
+                    <button
+                        className="create-group-btn"
+                        onClick={() => setShowCreateModal(true)}
+                    >
+                        + Create
+                    </button>
+
+                </div>
 
                 {
 
@@ -146,12 +166,35 @@ function Groups() {
                                         : "group-item"
                                 }
                                 onClick={() => {
+
                                     setSelectedGroup(group);
+
                                     fetchMessages(group.id);
+
                                 }}
                             >
 
-                                {group.name}
+                                <div className="group-avatar">
+
+                                    {group.name.charAt(0).toUpperCase()}
+
+                                </div>
+
+                                <div className="group-details">
+
+                                    <h3>
+
+                                        {group.name}
+
+                                    </h3>
+
+                                    <p>
+
+                                        {group.member_count} Members
+
+                                    </p>
+
+                                </div>
 
                             </div>
 
@@ -179,13 +222,53 @@ function Groups() {
 
                     ) : (
 
-                        <h2>Select a group</h2>
+                        <div className="no-group-selected">
+
+                            <h2>
+
+                                Select a Group
+
+                            </h2>
+
+                            <p>
+
+                                Choose a group from the left to start chatting.
+
+                            </p>
+
+                        </div>
 
                     )
 
                 }
 
             </div>
+
+            {
+                showCreateModal && (
+
+                    <Modal
+                        title="Create Group"
+                        onClose={() => setShowCreateModal(false)}
+                    >
+
+                        <CreateGroupModal
+                            onClose={() =>
+                                setShowCreateModal(false)
+                            }
+                            onSuccess={() => {
+
+                                fetchGroups();
+
+                                setShowCreateModal(false);
+
+                            }}
+                        />
+
+                    </Modal>
+
+                )
+            }
 
         </div>
 

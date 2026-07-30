@@ -27,6 +27,30 @@ router.post("/request/:id", auth, async (req, res) => {
         [sender, receiver]
     );
 
+    await db.query(
+        `INSERT INTO notifications
+        (
+            user_id,
+            sender_id,
+            type
+        )
+        VALUES
+        (
+            $1,
+            $2,
+            $3
+        )`,
+        [
+            receiver,
+            sender,
+            "friend_request"
+        ]
+    );
+    const io = req.app.get("io");
+
+    io.to(receiver.toString()).emit(
+        "newNotification"
+    );
     res.json({ msg: "Friend request sent" });
 });
 
@@ -40,6 +64,30 @@ router.post("/accept/:id", auth, async (req, res) => {
          SET status='accepted' 
          WHERE sender_id=$1 AND receiver_id=$2`,
         [sender, receiver]
+    );
+    await db.query(
+        `INSERT INTO notifications
+        (
+            user_id,
+            sender_id,
+            type
+        )
+        VALUES
+        (
+            $1,
+            $2,
+            $3
+        )`,
+        [
+            sender,
+            receiver,
+            "friend_accept"
+        ]
+    );
+    const io = req.app.get("io");
+
+    io.to(sender.toString()).emit(
+        "newNotification"
     );
 
     if (result.rowCount === 0)
@@ -79,6 +127,40 @@ router.get("/pending", auth, async (req, res) => {
     `, [userId]);
 
     res.json(result.rows);
+});
+
+// Search users
+router.get("/search", auth, async (req, res) => {
+
+    const userId = req.user.id;
+    const query = req.query.query || "";
+
+    try {
+
+        const result = await db.query(
+            `SELECT id, name, email
+             FROM users
+             WHERE id != $1
+               AND (
+                    name ILIKE $2
+                    OR email ILIKE $2
+               )
+             LIMIT 20`,
+            [userId, `%${query}%`]
+        );
+
+        res.json(result.rows);
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            error: "Server error"
+        });
+
+    }
+
 });
 
 module.exports = router;

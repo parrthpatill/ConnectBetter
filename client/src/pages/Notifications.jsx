@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+import { useNotifications } from "../context/NotificationContext";
 
 function Notifications() {
-
+    const { setUnreadCount } = useNotifications();
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
@@ -15,6 +16,9 @@ function Notifications() {
 
                 setNotifications(response.data);
 
+                await api.patch("/notifications/read");
+
+                setUnreadCount(0);
             } catch (err) {
 
                 console.error("Failed to load notifications:", err);

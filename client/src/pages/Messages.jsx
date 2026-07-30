@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import api from "../api/axios";
 
 import ConversationList from "../components/ConversationList";
@@ -10,7 +11,7 @@ function Messages() {
     const [friends, setFriends] = useState([]);
     const [selectedFriend, setSelectedFriend] = useState(null);
     const [messages, setMessages] = useState([]);
-
+    const location = useLocation();
     useEffect(() => {
 
         const fetchFriends = async () => {
@@ -20,6 +21,18 @@ function Messages() {
                 const response = await api.get("/friends");
 
                 setFriends(response.data);
+
+                if (location.state?.friend) {
+
+                    const friend = response.data.find(
+                        (f) => f.id === location.state.friend.id
+                    );
+
+                    if (friend) {
+                        setSelectedFriend(friend);
+                    }
+
+                }
 
             } catch (error) {
 
@@ -106,34 +119,26 @@ function Messages() {
 
     }, []);
 
-    // temperory
-    useEffect(() => {
-        console.log("Socket connected:", socket.connected);
+    const handleSendMessage = async (text) => {
 
-        socket.on("connect", () => {
-            console.log("Socket connected with id:", socket.id);
-        });
-
-        socket.on("connect_error", (err) => {
-            console.log("Socket error:", err);
-        });
-
-        return () => {
-            socket.off("connect");
-            socket.off("connect_error");
-        };
-    }, []);
-
-    const handleSendMessage = (text) => {
-        console.log("Sending:", text);
         if (!selectedFriend || !text.trim()) {
             return;
         }
 
-        socket.emit("sendMessage", {
-            receiver: selectedFriend.id,
-            text,
-        });
+        try {
+
+            const res = await api.post("/messages", {
+                receiverId: selectedFriend.id,
+                text,
+            });
+
+            socket.emit("sendMessage", res.data);
+
+        } catch (err) {
+
+            console.error(err);
+
+        }
 
     };
 
