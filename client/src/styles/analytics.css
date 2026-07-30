@@ -1,0 +1,52 @@
+.analytics-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.analytics-page h1 {
+    margin: 0;
+}
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 20px;
+}
+
+.charts-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 24px;
+
+    margin-top: 30px;
+
+}
+
+.full-width {
+
+    grid-column: 1 / -1;
+
+}
+
+@media (max-width: 900px) {
+
+    .charts-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+.event-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}

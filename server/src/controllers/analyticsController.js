@@ -84,14 +84,14 @@ exports.getProductivityScore = async (req, res) => {
 
 };
 
-exports.getEventFrequency = async (req, res) => {
+exports.getEventSummary = async (req, res) => {
 
     try {
 
         const userId = req.user.id;
 
         const analytics =
-            await analyticsService.getEventFrequency(userId);
+            await analyticsService.getEventSummary(userId);
 
         res.status(200).json({
             success: true,

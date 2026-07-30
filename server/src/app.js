@@ -11,6 +11,7 @@ const eventRoutes = require("./routes/eventRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 const http = require("http");
 const { Server } = require("socket.io");
@@ -35,9 +36,10 @@ app.use("/api/comments", require("./routes/commentRoutes"));
 app.use("/api/reactions", require("./routes/reactionRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
 app.use("/api/messages", messageRoutes);
-app.use("/api/group", require("./routes/groupRoutes"));
+app.use("/api/groups", require("./routes/groupRoutes"));
 app.use("/api/ai", aiRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/profile", profileRoutes);
 
 require("./services/socket")(io);
 
@@ -51,15 +53,6 @@ app.get('/api/health', (req, res) => {
 app.get('/api/protected', authMiddleware, (req, res) => {
     res.json("Protected route accessed!");
 })
-
-// SOCKET CONNECTION
-io.on("connection", (socket) => {
-    console.log("User connected:", socket.id);
-
-    socket.on("disconnect", () => {
-        console.log("User disconnected:", socket.id);
-    });
-});
 
 const PORT = process.env.PORT || 5000;
 

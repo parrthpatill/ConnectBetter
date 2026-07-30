@@ -8,8 +8,19 @@ module.exports = (io) => {
 
         // 🔹 store user connection
         socket.on("join", (userId) => {
+            socket.userId = userId;
             users[userId] = socket.id;
             console.log("User joined:", userId);
+        });
+
+        socket.on("joinPrivateRoom", ({ sender, receiver }) => {
+            const room = [sender, receiver]
+                .sort()
+                .join("_");
+            socket.join(room);
+            console.log(
+                `User ${sender} joined room ${room}`
+            );
         });
 
         // 🔹 send notification to specific user
@@ -34,22 +45,53 @@ module.exports = (io) => {
             }
         });
 
-        socket.on("sendMessage", async ({ sender, receiver, text }) => {
+        socket.on("sendMessage", async ({ receiver, text }) => {
+            console.log("sendMessage event received", {
+                sender: socket.userId,
+                receiver,
+                text,
+            });
             try {
-                // Save in DB
+
+                // Ensure the sender is authenticated
+                if (!socket.userId) {
+                    return;
+                }
+
+                // Check if both users are friends
+                const friendship = await db.query(
+                    `SELECT 1
+                    FROM friend_requests
+                    WHERE (
+                            (sender_id = $1 AND receiver_id = $2)
+                        OR (sender_id = $2 AND receiver_id = $1)
+                    )
+                    AND status = 'accepted'`,
+                    [socket.userId, receiver]
+                );
+
+                if (friendship.rows.length === 0) {
+                    return;
+                }
+
+                // Save message
                 const result = await db.query(
                     `INSERT INTO messages (sender_id, receiver_id, text)
                     VALUES ($1, $2, $3)
                     RETURNING *`,
-                    [sender, receiver, text]
+                    [socket.userId, receiver, text]
                 );
+
                 const message = result.rows[0];
-                const room = [sender, receiver].sort().join("_");
+
+                const room = [socket.userId, receiver]
+                    .sort()
+                    .join("_");
 
                 io.to(room).emit("receiveMessage", message);
 
             } catch (err) {
-                console.log(err);
+                console.error(err);
             }
         });
 
@@ -58,24 +100,17 @@ module.exports = (io) => {
             socket.join(`group_${groupId}`);
         });
 
-        socket.on("sendGroupMessage", async ({ groupId, message }) => {
-            try {
-                // save in DB
-                const result = await db.query(
-                    `INSERT INTO messages (sender_id, group_id, content, is_group)
-                    VALUES ($1, $2, $3, true) RETURNING *`,
-                    [socket.userId, groupId, message]
+        socket.on(
+            "sendGroupMessage",
+            ({ groupId, message }) => {
+
+                io.to(`group_${groupId}`).emit(
+                    "receiveGroupMessage",
+                    message
                 );
 
-                const msg = result.rows[0];
-
-                // emit to all in group
-                io.to(`group_${groupId}`).emit("receiveGroupMessage", msg);
-
-            } catch (err) {
-                console.error(err);
             }
-        });
+        );
 
     });
 };

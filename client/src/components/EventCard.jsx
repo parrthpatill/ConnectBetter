@@ -26,11 +26,19 @@ function EventCard({
             <div className="event-footer">
 
                 <div>
+
                     <strong>{event.name}</strong>
 
                     <br />
 
-                    {new Date(event.event_date).toLocaleString()}
+                    <span>created an event</span>
+
+                    <br />
+
+                    <small>
+                        {new Date(event.event_date).toLocaleString()}
+                    </small>
+
                 </div>
 
                 {isOwner && (

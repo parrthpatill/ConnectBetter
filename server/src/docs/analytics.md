@@ -106,7 +106,7 @@ Group messages are excluded.
 ### Endpoint
 
 ```
-GET /event-frequency
+GET /event-summary
 ```
 
 ### Description

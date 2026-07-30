@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import Navbar from "../components/Navbar";
 import Modal from "../components/Modal";
 import EventForm from "../components/EventForm";
 import EventCard from "../components/EventCard";
@@ -9,8 +8,7 @@ import { getEvents } from "../services/eventService";
 
 import { useAuth } from "../context/AuthContext";
 import { deleteEvent } from "../services/eventService";
-
-import AppLayout from "../layouts/AppLayout";
+import "../styles/feed.css";
 
 function Feed() {
     const [events, setEvents] = useState([]);
@@ -43,24 +41,50 @@ function Feed() {
         }
     };
     return (
-        <AppLayout>
+        <>
 
-            <button
-                onClick={() => setShowModal(true)}
-            >
-                Create Event
-            </button>
+            <div className="feed-header">
 
-            <br /><br />
+                <div>
+                    <h1>Activity Feed</h1>
+                    <p>Stay updated with the latest activity from your network.</p>
+                </div>
 
-            {events.map(event => (
-                <EventCard
-                    key={event.id}
-                    event={event}
-                    currentUser={user}
-                    onDelete={handleDelete}
-                />
-            ))}
+                <button
+                    className="create-event-btn"
+                    onClick={() => setShowModal(true)}
+                >
+                    + Create Event
+                </button>
+
+            </div>
+
+            {events.length === 0 ? (
+
+                <div className="empty-feed">
+
+                    <h3>No events yet</h3>
+
+                    <p>
+                        Create your first event to get started.
+                    </p>
+
+                </div>
+
+            ) : (
+
+                events.map((event) => (
+
+                    <EventCard
+                        key={event.id}
+                        event={event}
+                        currentUser={user}
+                        onDelete={handleDelete}
+                    />
+
+                ))
+
+            )}
 
             {showModal && (
                 <Modal
@@ -76,7 +100,7 @@ function Feed() {
                 </Modal>
             )}
 
-        </AppLayout>
+        </>
     );
 }
 

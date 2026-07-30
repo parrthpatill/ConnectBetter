@@ -281,7 +281,7 @@ class AnalyticsService {
 
     }
 
-    async getEventFrequency(userId) {
+    async getEventSummary(userId) {
 
         const totalResult = await db.query(
             `

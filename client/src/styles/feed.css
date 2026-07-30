@@ -1,0 +1,47 @@
+.feed-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:30px;
+}
+
+.feed-header h1{
+    margin:0;
+    font-size:30px;
+}
+
+.feed-header p{
+    margin-top:6px;
+    color:#6b7280;
+}
+
+.create-event-btn{
+    background:#2563eb;
+    color:white;
+
+    border:none;
+    padding:12px 22px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:15px;
+    font-weight:600;
+}
+
+.create-event-btn:hover{
+    background:#1d4ed8;
+}
+
+.empty-feed{
+    background:white;
+    padding:50px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    color:#6b7280;
+}

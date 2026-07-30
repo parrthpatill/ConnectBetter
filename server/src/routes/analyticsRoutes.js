@@ -25,11 +25,11 @@ router.get(
     analyticsController.getProductivityScore
 );
 
-// Event Frequency
+// Event Summary
 router.get(
-    "/event-frequency",
+    "/event-summary",
     authMiddleware,
-    analyticsController.getEventFrequency
+    analyticsController.getEventSummary
 );
 
 // Weekly Activity

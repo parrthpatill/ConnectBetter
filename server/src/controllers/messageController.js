@@ -3,11 +3,16 @@ const db = require("../db");
 // Helper function to check if two users are friends
 async function checkFriend(u1, u2) {
     const result = await db.query(
-        `SELECT 1 FROM friends 
-         WHERE (user1 = $1 AND user2 = $2)
-            OR (user1 = $2 AND user2 = $1)`,
+        `SELECT 1
+         FROM friend_requests
+         WHERE (
+                (sender_id = $1 AND receiver_id = $2)
+             OR (sender_id = $2 AND receiver_id = $1)
+         )
+         AND status = 'accepted'`,
         [u1, u2]
     );
+
     return result.rows.length > 0;
 }
 
@@ -64,12 +69,31 @@ exports.getMessages = async (req, res) => {
 
 exports.getGroupMessages = async (req, res) => {
     const { groupId } = req.params;
+    const member = await db.query(
+        `SELECT 1
+        FROM group_members
+        WHERE group_id = $1
+        AND user_id = $2`,
+        [groupId, req.user.id]
+    );
 
+    if (member.rows.length === 0) {
+
+        return res.status(403).json({
+            error: "Not a member of this group"
+        });
+
+    }
     try {
         const result = await db.query(
-            `SELECT * FROM messages
-             WHERE group_id = $1
-             ORDER BY created_at ASC`,
+            `SELECT
+                m.*,
+                u.name AS sender_name
+            FROM messages m
+            JOIN users u
+            ON u.id = m.sender_id
+            WHERE m.group_id = $1
+            ORDER BY m.created_at ASC`,
             [groupId]
         );
 
@@ -77,4 +101,62 @@ exports.getGroupMessages = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+};
+
+exports.sendGroupMessage = async (req, res) => {
+
+    const { groupId, text } = req.body;
+
+    try {
+
+        // Verify membership
+        const member = await db.query(
+            `SELECT 1
+             FROM group_members
+             WHERE group_id = $1
+             AND user_id = $2`,
+            [groupId, req.user.id]
+        );
+
+        if (member.rows.length === 0) {
+            return res.status(403).json({
+                error: "Not a member of this group"
+            });
+        }
+
+        const result = await db.query(
+            `INSERT INTO messages
+            (
+                sender_id,
+                receiver_id,
+                text,
+                group_id,
+                is_group
+            )
+            VALUES
+            (
+                $1,
+                NULL,
+                $2,
+                $3,
+                TRUE
+            )
+            RETURNING *`,
+            [
+                req.user.id,
+                text,
+                groupId
+            ]
+        );
+
+        res.status(201).json(result.rows[0]);
+
+    } catch (err) {
+
+        res.status(500).json({
+            error: err.message
+        });
+
+    }
+
 };

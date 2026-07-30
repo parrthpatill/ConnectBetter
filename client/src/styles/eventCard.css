@@ -1,11 +1,19 @@
 .event-card {
     background: white;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 24px;
+    margin-bottom: 24px;
 
-    border-radius: 10px;
+    border-radius: 14px;
 
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .event-header {
@@ -13,29 +21,49 @@
     justify-content: space-between;
     align-items: center;
 
-    margin-bottom: 10px;
+    margin-bottom: 16px;
+}
+
+.event-header h3 {
+    margin: 0;
+    font-size: 22px;
+    color: #111827;
 }
 
 .event-header span {
     background: #2563eb;
     color: white;
 
-    padding: 4px 10px;
+    padding: 6px 12px;
 
-    border-radius: 20px;
+    border-radius: 999px;
 
     font-size: 13px;
+    font-weight: 600;
+}
+
+.event-card p {
+    color: #4b5563;
+    line-height: 1.6;
+    margin: 0;
 }
 
 .event-footer {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
-    margin-top: 20px;
+    margin-top: 24px;
+    padding-top: 16px;
 
-    color: gray;
+    border-top: 1px solid #e5e7eb;
 
+    color: #6b7280;
     font-size: 14px;
+}
+
+.event-footer strong {
+    color: #111827;
 }
 
 .delete-btn {
@@ -44,11 +72,15 @@
 
     border: none;
 
-    padding: 8px 14px;
+    padding: 10px 16px;
 
-    border-radius: 6px;
+    border-radius: 8px;
 
     cursor: pointer;
+
+    font-weight: 600;
+
+    transition: background 0.2s ease;
 }
 
 .delete-btn:hover {
