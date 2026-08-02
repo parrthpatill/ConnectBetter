@@ -284,22 +284,6 @@ Socket.IO is used for:
 
 ---
 
-# Screenshots
-
-> Add screenshots of the following:
-
-- Landing Page
-- Dashboard
-- Feed
-- Friends
-- Messaging
-- Groups
-- Events
-- Analytics
-- Notifications
-
----
-
 # Deployment
 
 ## Frontend
