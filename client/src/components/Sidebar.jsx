@@ -19,7 +19,7 @@ function Sidebar() {
     return (
         <aside className="sidebar">
 
-            <NavLink to="/">
+            <NavLink to="/feed">
                 <FiHome />
                 <span>Feed</span>
             </NavLink>
